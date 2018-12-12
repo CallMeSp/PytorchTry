@@ -80,6 +80,7 @@ with torch.no_grad():
         images = images.reshape(-1, 28 * 28).to(device)
         labels = labels.to(device)
         outputs = model(images)
+        # 第一个返回值是真实的max值,第二个是索引
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()

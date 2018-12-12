@@ -4,6 +4,9 @@ import torchvision
 import torchvision.transforms as transforms
 import time
 # Hyper-parameters
+
+device = torch.device('cuda' if not torch.cuda.is_available() else 'cpu')
+
 input_size = 784
 num_classes = 10
 num_epochs = 5
@@ -24,7 +27,7 @@ test_loader = torch.utils.data.DataLoader(
     dataset=test_dataset, batch_size=batch_size, shuffle=False)
 
 # Logistic regression model
-model = nn.Linear(input_size, num_classes)
+model = nn.Linear(input_size, num_classes).to(device)
 
 # Loss and optimizer
 # nn.CrossEntropyLoss() computes softmax internally
@@ -39,8 +42,8 @@ for epoch in range(num_epochs):
         # Reshape images to (batch_size, input_size)
         # 新数组的shape属性应该要与原来数组的一致，即新数组元素数量与原数组元素数量要相等。
         # 一个参数为-1时，那么reshape函数会根据另一个参数的维度计算出数组的另外一个shape属性值。
-        images = images.reshape(-1, 28 * 28)
-
+        images = images.reshape(-1, 28 * 28).to(device)
+        labels = labels.to(device)
         # Forward pass
         outputs = model(images)
         loss = criterion(outputs, labels)
@@ -62,7 +65,8 @@ with torch.no_grad():
     correct = 0
     total = 0
     for images, labels in test_loader:
-        images = images.reshape(-1, 28 * 28)
+        images = images.reshape(-1, 28 * 28).to(device)
+        labels = labels.to(device)
         outputs = model(images)
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
