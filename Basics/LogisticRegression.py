@@ -2,23 +2,19 @@ import torch
 import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
-
+import time
 # Hyper-parameters
 input_size = 784
 num_classes = 10
 num_epochs = 5
 batch_size = 64
-learning_rate = 0.001
-
+learning_rate = 0.01
 # MNIST dataset (images and labels)
 train_dataset = torchvision.datasets.MNIST(
-    root='../../data',
-    train=True,
-    transform=transforms.ToTensor(),
-    download=True)
+    root='../data', train=True, transform=transforms.ToTensor(), download=True)
 
 test_dataset = torchvision.datasets.MNIST(
-    root='../../data', train=False, transform=transforms.ToTensor())
+    root='../data', train=False, transform=transforms.ToTensor())
 
 # Data loader (input pipeline)
 train_loader = torch.utils.data.DataLoader(
@@ -37,6 +33,7 @@ optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
 # Train the model
 total_step = len(train_loader)
+t1 = time.time()
 for epoch in range(num_epochs):
     for i, (images, labels) in enumerate(train_loader):
         # Reshape images to (batch_size, input_size)
@@ -50,13 +47,15 @@ for epoch in range(num_epochs):
 
         # Backward and optimize
         optimizer.zero_grad()
+
         loss.backward()
         optimizer.step()
 
         if (i + 1) % 100 == 0:
             print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'.format(
                 epoch + 1, num_epochs, i + 1, total_step, loss.item()))
-
+t2 = time.time()
+print(float(t2 - t1) / 60)
 # Test the model
 # In test phase, we don't need to compute gradients (for memory efficiency)
 with torch.no_grad():
@@ -73,4 +72,4 @@ with torch.no_grad():
         100 * correct / total))
 
 # Save the model checkpoint
-torch.save(model, 'model.ckpt')
+torch.save(model, 'Logisticmodel.ckpt')

@@ -57,4 +57,4 @@ plt.legend()
 plt.show()
 
 # Save the model checkpoint
-# torch.save(model, 'model.ckpt')
+torch.save(model, 'model.ckpt')

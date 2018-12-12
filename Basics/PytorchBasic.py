@@ -86,7 +86,7 @@ z = y.numpy()
 # Download and construct CIFAR-10 dataset.
 # type =  <class 'torchvision.datasets.cifar.CIFAR10'>
 train_dataset = torchvision.datasets.CIFAR10(
-    root='../../data/',
+    root='./data/',
     train=True,
     # 把一个取值范围是[0,255]的PIL.Image或者shape为(H,W,C)的numpy.ndarray，转换成形状为[C,H,W]的torch.Tensor
     transform=transforms.ToTensor(),  
