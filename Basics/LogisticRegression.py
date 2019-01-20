@@ -9,7 +9,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 input_size = 784
 num_classes = 10
-num_epochs = 5
+num_epochs = 1
 batch_size = 64
 learning_rate = 0.01
 # MNIST dataset (images and labels)
@@ -68,6 +68,7 @@ with torch.no_grad():
         images = images.reshape(-1, 28 * 28).to(device)
         labels = labels.to(device)
         outputs = model(images)
+        # orch.max(a,1) 返回每一行中最大值的那个元素，且返回其索引（返回最大元素在这一行的列索引）
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum()

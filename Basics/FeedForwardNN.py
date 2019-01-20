@@ -4,7 +4,7 @@ import torchvision
 import torchvision.transforms as transforms
 
 # Device configuration
-device = torch.device('cuda' if not torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Hyper-parameters
 input_size = 784
