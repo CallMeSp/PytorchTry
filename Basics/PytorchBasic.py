@@ -65,7 +65,6 @@ optimizer.step()
 pred = linear(x)
 loss = criterion(pred, y)
 print('loss after 1 step optimization: ', loss.item())
-
 # ================================================================== #
 #                     3. Loading data from numpy                     #
 # ================================================================== #
@@ -89,7 +88,7 @@ train_dataset = torchvision.datasets.CIFAR10(
     root='./data/',
     train=True,
     # 把一个取值范围是[0,255]的PIL.Image或者shape为(H,W,C)的numpy.ndarray，转换成形状为[C,H,W]的torch.Tensor
-    transform=transforms.ToTensor(),  
+    transform=transforms.ToTensor(),
     download=True)
 
 # Fetch one data pair (read data from disk).
@@ -98,6 +97,7 @@ print('image.size:', image.size())
 print('label:', label)
 
 # Data loader (this provides queues and threads in a very simple way).
+# 数据加载器。组合数据集和采样器，并在数据集上提供单进程或多进程迭代器。
 # <class 'torch.utils.data.dataloader.DataLoader'>
 train_loader = torch.utils.data.DataLoader(
     dataset=train_dataset, batch_size=64, shuffle=True)
@@ -151,7 +151,7 @@ resnet = torchvision.models.resnet18(pretrained=True)
 for param in resnet.parameters():
     param.requires_grad = False
 
-# Replace the top layer for finetuning.
+# Replace the top layer for finetuning. fc=full connection ?
 resnet.fc = nn.Linear(resnet.fc.in_features, 100)  # 100 is an example.
 
 # Forward pass.
