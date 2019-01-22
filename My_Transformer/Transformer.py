@@ -181,6 +181,22 @@ def attention(query, key, value, mask=None, dropout=None):
     return torch.matmul(p_attn, value), p_attn
 
 
+class MultiHeadedAttention(nn.Module):
+    def __init__(self, h, d_model, dropout=0.1):
+        """
+        :param h:并行的head数量
+        :param d_model:原始word的embeddingsize或者一个encoder的输出维度
+        :param dropout:dropout比例
+        """
+        super(MultiHeadedAttention, self).__init__()
+        self.h = h
+        self.d_model = d_model
+        self.dropout = dropout
+        assert d_model % h == 0
+        self.d_k = d_model//h
+
+
+
 if __name__ == '__main__':
     plt.figure(figsize=(10, 10))
     plt.imshow(subsequent_mask(20)[0])
