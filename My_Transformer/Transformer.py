@@ -93,7 +93,7 @@ class LayerNorm(nn.Module):
 class SublayerConnection(nn.Module):
     """
     A residual connection followed by a layer norm.
-    Note for code simplicity the norm is first as opposed to last.!!!!!!!!!!!!!!!!!!!!!!!!!
+    Note for code simplicity the norm is first as opposed to last.
     """
 
     def __init__(self, size, dropout):
@@ -193,11 +193,25 @@ class MultiHeadedAttention(nn.Module):
         self.d_model = d_model
         self.dropout = dropout
         assert d_model % h == 0
-        self.d_k = d_model//h
+        self.d_k = d_model // h
+        self.linears = clones(nn.Linear(d_model, d_model), 4)
+        self.attn = None
 
+    def forward(self, query, key, value, mask=None):
+        if mask is not None:
+            mask = mask.unsqueeze(1)
+        nbatches = query.size(0)
+        # 1) Do all the linear projections in batch from d_model => h x d_k
+        query, key, value = [l(x).view(nbatches, -1, self.h, self.d_k).transpose(1, 2) for l, x in
+                             zip(self.linears, (query, key, value))]
+        # 2) Apply attention on all the projected vectors in batch.
+        x, self.attn = attention(query, key, value, mask=mask, dropout=self.dropout)
+        # 3) "Concat" using a view and apply a final linear.
+        x = x.transpose(1, 2).contiguous().view(nbatches, -1, self.h * self.d_k)
+        return self.linears[-1](x)
 
 
 if __name__ == '__main__':
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=(5, 5))
     plt.imshow(subsequent_mask(20)[0])
     plt.show()
