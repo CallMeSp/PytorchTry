@@ -5,9 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8140deec-70ec-415b-9ba5-711175a89137" name="Default Changelist" comment="from pycharm test">
-      <change beforePath="$PROJECT_DIR$/.idea/PytorchTry.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PytorchTry.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/My_Transformer/Transformer.py" beforeDir="false" afterPath="$PROJECT_DIR$/My_Transformer/Transformer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,8 +32,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/My_Transformer/Transformer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
-              <caret line="332" column="31" lean-forward="true" selection-start-line="332" selection-start-column="31" selection-end-line="332" selection-end-column="31" />
+            <state relative-caret-position="451">
+              <caret line="540" column="45" selection-start-line="540" selection-start-column="45" selection-end-line="540" selection-end-column="45" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -212,12 +209,12 @@
       <workItem from="1548154928262" duration="1639000" />
       <workItem from="1548156988339" duration="3445000" />
       <workItem from="1548231180526" duration="8805000" />
-      <workItem from="1548307433428" duration="8347000" />
+      <workItem from="1548307433428" duration="8554000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40330000" />
+    <option name="totallyTimeSpent" value="40537000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
@@ -245,8 +242,8 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50039715" side_tool="true" weight="0.32968238" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49960285" weight="0.27292576" />
-      <window_info active="true" anchor="bottom" x="10" y="433" width="1260" height="217" id="Python Console" order="11" sideWeight="0.49919355" visible="true" weight="0.31222707" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49960285" visible="true" weight="0.27292576" />
+      <window_info anchor="bottom" x="10" y="433" width="1260" height="217" id="Python Console" order="11" sideWeight="0.49919355" weight="0.31222707" />
       <window_info anchor="bottom" auto_hide="true" id="SciView" order="12" weight="0.34497815" />
       <window_info anchor="bottom" id="Version Control" order="13" sideWeight="0.50080645" weight="0.25873363" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -314,8 +311,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/My_Transformer/Transformer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="332" column="31" lean-forward="true" selection-start-line="332" selection-start-column="31" selection-end-line="332" selection-end-column="31" />
+        <state relative-caret-position="451">
+          <caret line="540" column="45" selection-start-line="540" selection-start-column="45" selection-end-line="540" selection-end-column="45" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
