@@ -51,7 +51,7 @@ def clones(module, N):
     :param N:需要生成的个数
     :return:nn.moduleList
     """
-    return nn.ModuleList([copy.deepcopy(module)] for _ in range(N))
+    return nn.ModuleList([copy.deepcopy(module) for _ in range(N)])
 
 
 class Encoder(nn.Module):
@@ -243,24 +243,39 @@ class PositionalEncoding(nn.Module):
         # Compute the positional encodings once in log space.
         pe = torch.zeros(max_len, d_model)
         position = torch.arange(0, max_len).unsqueeze(1).float()
-        div_term = torch.exp((torch.arange(0, d_model, 2) *
-                              -(math.log(10000.0) / d_model)).float())
+        div_term = torch.exp(-(torch.arange(0., d_model, 2) / d_model) *
+                             math.log(10000.0))
         pe[:, 0::2] = torch.sin(position * div_term)
         pe[:, 1::2] = torch.cos(position * div_term)
         pe = pe.unsqueeze(0)
         self.register_buffer('pe', pe)
 
     def forward(self, x):
+        print('x.size():', x.size())
+        print('pe.size():', self.pe.size())
         x = x + Variable(self.pe[:, :x.size(1)],
                          requires_grad=False)
         return self.dropout(x)
 
 
+def make_model(src_vocab, tgt_vocab, N=6, d_model=512, d_ff=2048, h=8, dropout=0.1):
+    # construct a model from hyperparameters
+    c = copy.deepcopy
+    attn = MultiHeadedAttention(h, d_model)
+    ff = PositionwiseFeedForward(d_model, d_ff, dropout)
+    position = PositionalEncoding(d_model, dropout)
+    model = EncoderDecoder(Encoder(EncoderLayer(d_model, c(attn), c(ff), dropout), N),
+                           Decoder(DecoderLayer(d_model, c(attn), c(attn), c(ff), dropout), N),
+                           nn.Sequential(Embeddings(d_model, src_vocab), c(position)),
+                           nn.Sequential(Embeddings(d_model, tgt_vocab), c(position)),
+                           Generator(d_model, tgt_vocab))
+    # This was important from their code.
+    # Initialize parameters with Glorot / fan_avg.
+    for p in model.parameters():
+        if p.dim() > 1:
+            nn.init.xavier_uniform_(p)
+    return model
+
+
 if __name__ == '__main__':
-    plt.figure(figsize=(15, 5))
-    pe = PositionalEncoding(20, 0)
-    y = pe.forward(Variable(torch.zeros(1, 100, 20)))
-    print(y.size())
-    plt.plot(np.arange(100), y[0, :, 4:8].data.numpy())
-    plt.legend(["dim %d" % p for p in [4, 5, 6, 7]])
-    plt.show()
+    tmp_model = make_model(10, 10, 2)
