@@ -1,11 +1,17 @@
+import copy
+import math
+import time
+
+import matplotlib.pyplot as plt
 import numpy as np
+import seaborn
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import math, copy, time
 from torch.autograd import Variable
-import matplotlib.pyplot as plt
-import seaborn
+from torchtext import data, datasets
+
+seaborn.set_context(context="talk")
 
 
 class EncoderDecoder(nn.Module):
@@ -168,6 +174,7 @@ def subsequent_mask(size):
     return torch.from_numpy(subsequent_mask) == 0
 
 
+# Attention(Q,K,V)=softmax(QK^T/sqrt(d_k)) * V
 def attention(query, key, value, mask=None, dropout=None):
     # Compute 'Scaled Dot Product Attention'
     d_k = query.size(-1)
@@ -213,11 +220,15 @@ class MultiHeadedAttention(nn.Module):
         x, self.attn = attention(
             query, key, value, mask=mask, dropout=self.dropout)
         # 3) "Concat" using a view and apply a final linear.
+        # 有些tensor并不是占用一整块内存，而是由不同的数据块组成，
+        # 而tensor的view()操作依赖于内存是整块的，这时只需要执行contiguous()这个函数，
+        # 把tensor变成在内存中连续分布的形式。
         x = x.transpose(1, 2).contiguous().view(nbatches, -1,
                                                 self.h * self.d_k)
         return self.linears[-1](x)
 
 
+# FFN(x)=max(0,xW1+b1)W2+b2
 class PositionwiseFeedForward(nn.Module):
     # Implements FFN equation.
     def __init__(self, d_model, d_ff, dropout=0.1):
@@ -227,17 +238,21 @@ class PositionwiseFeedForward(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x):
+
         return self.w_2(self.dropout(F.relu(self.w_1(x))))
 
 
 class Embeddings(nn.Module):
     def __init__(self, d_model, vocab):
         super(Embeddings, self).__init__()
+        # 如果要使用预训练的则
+        # nn.Embedding(vocab, d_model).weight.data.copy_(torch.from_numpy(W))
         self.lut = nn.Embedding(vocab, d_model)
         self.d_model = d_model
 
     def forward(self, x):
-        return self.lut(x) * math.sqrt(self.d_model)
+        newx = x.long()
+        return self.lut(newx) * math.sqrt(self.d_model)
 
 
 class PositionalEncoding(nn.Module):
@@ -338,6 +353,7 @@ def run_epoch(data_iter, model, loss_compute):
 global max_src_in_batch, max_tgt_in_batch
 
 
+# 因为这是应用于翻译任务，所以这里分配batch是将长度近似的句子pair分配在一起。
 def batch_size_fn(new, count, sofar):
     # keep augmenting batch and calculate total number of tokens + padding
     global max_src_in_batch, max_tgt_in_batch
@@ -376,9 +392,9 @@ class NoamOpt:
     def rate(self, step=None):
         if step is None:
             step = self._step
-        return self.factor * \
-               (self.model_size ** (-0.5) *
-                min(step ** (-0.5), step * self.warmup ** (-1.5)))
+        return self.factor * (self.model_size**
+                              (-0.5) * min(step**
+                                           (-0.5), step * self.warmup**(-1.5)))
 
 
 class LabelSmoothing(nn.Module):
@@ -401,7 +417,7 @@ class LabelSmoothing(nn.Module):
         true_dist.fill_(self.smoothing / (self.size - 2))
         # print('true_dist_fill:', true_dist, self.smoothing / (self.size - 2))
         # 将src中的所有值按照index确定的索引写入本tensor中
-        true_dist.scatter_(1, target.data.unsqueeze(1), self.confidence)
+        true_dist.scatter_(1, target.data.unsqueeze(1).long(), self.confidence)
         # print('true_dist_scatter:', true_dist, 'targetdataunsqueeze:', target.data.unsqueeze(1))
         true_dist[:, self.padding_idx] = 0
         # print('true_dist_0:', true_dist)
@@ -447,26 +463,26 @@ def greedy_decode(model, src, src_mask, max_len, start_symbol):
     memory = model.encode(src, src_mask)
     ys = torch.ones(1, 1).fill_(start_symbol).type_as(src.data)
     for i in range(max_len - 1):
-        out = model.decode(memory, src_mask,
-                           Variable(ys),
-                           Variable(subsequent_mask(ys.size(1))
-                                    .type_as(src.data)))
+        out = model.decode(
+            memory, src_mask, Variable(ys),
+            Variable(subsequent_mask(ys.size(1)).type_as(src.data)))
         prob = model.generator(out[:, -1])
         _, next_word = torch.max(prob, dim=1)
         next_word = next_word.data[0]
-        ys = torch.cat([ys,
-                        torch.ones(1, 1).type_as(src.data).fill_(next_word)], dim=1)
+        ys = torch.cat(
+            [ys, torch.ones(1, 1).type_as(src.data).fill_(next_word)], dim=1)
     return ys
 
 
 class MyIterator(data.Iterator):
     def create_batches(self):
         if self.train:
+
             def pool(d, random_shuffler):
                 for p in data.batch(d, self.batch_size * 100):
                     p_batch = data.batch(
-                        sorted(p, key=self.sort_key),
-                        self.batch_size, self.batch_size_fn)
+                        sorted(p, key=self.sort_key), self.batch_size,
+                        self.batch_size_fn)
                     for b in random_shuffler(list(p_batch)):
                         yield b
 
@@ -491,29 +507,27 @@ class MultiGPULossCompute:
     def __init__(self, generator, criterion, devices, opt=None, chunk_size=5):
         # Send out to different gpus.
         self.generator = generator
-        self.criterion = nn.parallel.replicate(criterion,
-                                               devices=devices)
+        self.criterion = nn.parallel.replicate(criterion, devices=devices)
         self.opt = opt
         self.devices = devices
         self.chunk_size = chunk_size
 
     def __call__(self, out, targets, normalize):
         total = 0.0
-        generator = nn.parallel.replicate(self.generator,
-                                          devices=self.devices)
-        out_scatter = nn.parallel.scatter(out,
-                                          target_gpus=self.devices)
+        generator = nn.parallel.replicate(self.generator, devices=self.devices)
+        out_scatter = nn.parallel.scatter(out, target_gpus=self.devices)
         out_grad = [[] for _ in out_scatter]
-        targets = nn.parallel.scatter(targets,
-                                      target_gpus=self.devices)
+        targets = nn.parallel.scatter(targets, target_gpus=self.devices)
 
         # Divide generating into chunks.
         chunk_size = self.chunk_size
         for i in range(0, out_scatter[0].size(1), chunk_size):
             # Predict distributions
-            out_column = [[Variable(o[:, i:i + chunk_size].data,
-                                    requires_grad=self.opt is not None)]
-                          for o in out_scatter]
+            out_column = [[
+                Variable(
+                    o[:, i:i + chunk_size].data,
+                    requires_grad=self.opt is not None)
+            ] for o in out_scatter]
             gen = nn.parallel.parallel_apply(generator, out_column)
 
             # Compute loss.
@@ -523,8 +537,7 @@ class MultiGPULossCompute:
             loss = nn.parallel.parallel_apply(self.criterion, y)
 
             # Sum and normalize loss
-            l = nn.parallel.gather(loss,
-                                   target_device=self.devices[0])
+            l = nn.parallel.gather(loss, target_device=self.devices[0])
             l = l.sum()[0] / normalize
             total += l.data[0]
 
@@ -538,8 +551,7 @@ class MultiGPULossCompute:
         if self.opt is not None:
             out_grad = [Variable(torch.cat(og, dim=1)) for og in out_grad]
             o1 = out
-            o2 = nn.parallel.gather(out_grad,
-                                    target_device=self.devices[0])
+            o2 = nn.parallel.gather(out_grad, target_device=self.devices[0])
             o1.backward(gradient=o2)
             self.opt.step()
             self.opt.optimizer.zero_grad()
@@ -547,7 +559,8 @@ class MultiGPULossCompute:
 
 
 if __name__ == '__main__':
-    # Train the simple copy task.
+    # Train the simple copy task
+    startTime = time.time()
     V = 11
     criterion = LabelSmoothing(size=V, padding_idx=0, smoothing=0.0)
     model = make_model(V, V, N=2)
@@ -567,3 +580,6 @@ if __name__ == '__main__':
             run_epoch(
                 data_gen(V, 30, 5), model,
                 SimpleLossCompute(model.generator, criterion, None)))
+    endTime = time.time()
+    # normal  1.04
+    print('cost:', (endTime - startTime) / 60)

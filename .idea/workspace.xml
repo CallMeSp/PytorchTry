@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8140deec-70ec-415b-9ba5-711175a89137" name="Default Changelist" comment="from pycharm test">
-      <change beforePath="$PROJECT_DIR$/My_Transformer/Transformer.py" beforeDir="false" afterPath="$PROJECT_DIR$/My_Transformer/Transformer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/PytorchTry.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PytorchTry.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basics/LogisticRegression.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basics/LogisticRegression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basics/PytorchBasic.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basics/PytorchBasic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Intermediate/BiLSTM.py" beforeDir="false" afterPath="$PROJECT_DIR$/Intermediate/BiLSTM.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Intermediate/RNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/Intermediate/RNN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Intermediate/RNN_LanguageModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/Intermediate/RNN_LanguageModel.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,13 +36,37 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/My_Transformer/Transformer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="451">
-              <caret line="540" column="45" selection-start-line="540" selection-start-column="45" selection-end-line="540" selection-end-column="45" />
+            <state relative-caret-position="250">
+              <caret line="10" column="32" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Basics/LogisticRegression.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="675">
+              <caret line="48" column="31" selection-start-line="48" selection-start-column="31" selection-end-line="48" selection-end-column="31" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Basics/PytorchBasic.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1993">
+              <caret line="55" selection-start-line="55" selection-end-line="55" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -56,14 +87,16 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Basics/PytorchBasic.py" />
         <option value="$PROJECT_DIR$/My_Transformer/Transformer.py" />
+        <option value="$PROJECT_DIR$/Basics/LogisticRegression.py" />
+        <option value="$PROJECT_DIR$/Basics/PytorchBasic.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="4">
-    <option name="width" value="1280" />
-    <option name="height" value="1044" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-7" />
+    <option name="width" value="974" />
+    <option name="height" value="1047" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -85,6 +118,16 @@
               <item name="PytorchTry" type="b2602c69:ProjectViewProjectNode" />
               <item name="PytorchTry" type="462c0819:PsiDirectoryNode" />
               <item name="Basics" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PytorchTry" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PytorchTry" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PytorchTry" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PytorchTry" type="462c0819:PsiDirectoryNode" />
+              <item name="Intermediate" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="PytorchTry" type="b2602c69:ProjectViewProjectNode" />
@@ -121,14 +164,11 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Transformer">
+  <component name="RunManager" selected="Python.PytorchBasic">
     <configuration name="PytorchBasic" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="PytorchTry" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Basics" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -148,6 +188,9 @@
       <module name="PytorchTry" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/My_Transformer" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -187,8 +230,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Transformer" />
         <item itemvalue="Python.PytorchBasic" />
+        <item itemvalue="Python.Transformer" />
       </list>
     </recent_temporary>
   </component>
@@ -210,11 +253,19 @@
       <workItem from="1548156988339" duration="3445000" />
       <workItem from="1548231180526" duration="8805000" />
       <workItem from="1548307433428" duration="8554000" />
+      <workItem from="1548345569541" duration="72000" />
+      <workItem from="1549000209336" duration="122000" />
+      <workItem from="1550038173727" duration="401000" />
+      <workItem from="1552655123422" duration="805000" />
+      <workItem from="1553153190126" duration="56000" />
+      <workItem from="1553153430348" duration="14000" />
+      <workItem from="1553224126963" duration="78000" />
+      <workItem from="1553602543316" duration="1493000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40537000" />
+    <option name="totallyTimeSpent" value="43578000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
@@ -226,10 +277,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1280" height="1044" extended-state="4" />
+    <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16129032" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.08585056" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -238,26 +289,60 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32751092" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.22776572" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50039715" side_tool="true" weight="0.32968238" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49960285" visible="true" weight="0.27292576" />
-      <window_info anchor="bottom" x="10" y="433" width="1260" height="217" id="Python Console" order="11" sideWeight="0.49919355" weight="0.31222707" />
-      <window_info anchor="bottom" auto_hide="true" id="SciView" order="12" weight="0.34497815" />
-      <window_info anchor="bottom" id="Version Control" order="13" sideWeight="0.50080645" weight="0.25873363" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49960285" weight="0.19414316" />
+      <window_info anchor="bottom" auto_hide="true" id="SciView" order="11" weight="0.23427331" />
+      <window_info anchor="bottom" id="Version Control" order="12" sideWeight="0.50080645" weight="0.23318872" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Remote Host" order="3" weight="0.32883242" />
       <window_info anchor="right" id="Database" order="4" weight="0.32962668" />
       <window_info anchor="right" x="0" y="0" width="267" height="844" id="Documentation" order="5" side_tool="true" weight="0.32822582" />
+      <window_info active="true" anchor="right" x="10" y="433" width="1260" height="217" id="Python Console" order="6" sideWeight="0.49919355" visible="true" weight="0.4920509" />
     </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.08585056" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.22776572" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50039715" side_tool="true" weight="0.32968238" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49960285" weight="0.19414316" />
+      <window_info anchor="bottom" auto_hide="true" id="SciView" order="11" weight="0.23427331" />
+      <window_info anchor="bottom" id="Version Control" order="12" sideWeight="0.50080645" weight="0.23318872" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Remote Host" order="3" weight="0.32883242" />
+      <window_info anchor="right" id="Database" order="4" weight="0.32962668" />
+      <window_info anchor="right" x="0" y="0" width="267" height="844" id="Documentation" order="5" side_tool="true" weight="0.32822582" />
+      <window_info anchor="right" x="10" y="433" width="1260" height="217" id="Python Console" order="6" sideWeight="0.49919355" visible="true" weight="0.4920509" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file:///usr/local/lib/python3.6/dist-packages/torch/nn/_reduction.py" />
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_bundle/pydev_umd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="196" selection-start-line="196" selection-end-line="196" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/anaconda3/envs/conda36/lib/python3.6/copy.py" />
     <entry file="file://$PROJECT_DIR$/Basics/LinearRegression.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -268,10 +353,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Intermediate/RNN_LanguageModel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="394">
+          <caret line="93" column="37" selection-start-line="93" selection-start-column="37" selection-end-line="93" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/My_Transformer/Transformer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="10" column="32" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Basics/LogisticRegression.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-90">
-          <caret line="34" column="30" selection-start-line="34" selection-start-column="30" selection-end-line="34" selection-end-column="30" />
+        <state relative-caret-position="675">
+          <caret line="48" column="31" selection-start-line="48" selection-start-column="31" selection-end-line="48" selection-end-column="31" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>
@@ -280,41 +385,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Basics/PytorchBasic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-837">
-          <caret line="99" column="37" selection-start-line="99" selection-start-column="37" selection-end-line="99" selection-end-column="37" />
+        <state relative-caret-position="-1993">
+          <caret line="55" selection-start-line="55" selection-end-line="55" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python3.6/dist-packages/torch/nn/_reduction.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="48" selection-start-line="48" selection-end-line="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_bundle/pydev_umd.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="196" selection-start-line="196" selection-end-line="196" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/anaconda3/envs/conda36/lib/python3.6/copy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="168" selection-start-line="168" selection-end-line="168" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/My_Transformer/Transformer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="451">
-          <caret line="540" column="45" selection-start-line="540" selection-start-column="45" selection-end-line="540" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

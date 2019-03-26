@@ -6,7 +6,7 @@ import time
 # Hyper-parameters
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
+print(device)
 input_size = 784
 num_classes = 10
 num_epochs = 1

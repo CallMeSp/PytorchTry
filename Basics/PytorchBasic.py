@@ -3,6 +3,7 @@ import torchvision
 import torch.nn as nn
 import numpy as np
 import torchvision.transforms as transforms
+
 # ================================================================== #
 #                     1. Basic autograd example 1                    #
 # ================================================================== #
@@ -48,23 +49,26 @@ loss = criterion(pred, y)
 print('loss: ', loss.item())
 
 # Backward pass.
-loss.backward()
+# loss.backward()
 
-# Print out the gradients.
-print('dL/dw: ', linear.weight.grad)
-print('dL/db: ', linear.bias.grad)
+for i in range(1):
+    # Print out the gradients.
 
-# 1-step gradient descent.
-optimizer.step()
+    pred = linear(x)
+    loss = criterion(pred, y)
+    # 1-step gradient descent.
+    optimizer.zero_grad()
+    loss.backward()
+    print('dL/dw: ', linear.weight.grad)
+    print('dL/db: ', linear.bias.grad)
+    optimizer.step()
+    # You can also perform gradient descent at the low level.
+    # linear.weight.data.sub_(0.01 * linear.weight.grad.data)
+    # linear.bias.data.sub_(0.01 * linear.bias.grad.data)
 
-# You can also perform gradient descent at the low level.
-# linear.weight.data.sub_(0.01 * linear.weight.grad.data)
-# linear.bias.data.sub_(0.01 * linear.bias.grad.data)
+    # Print out the loss after 1-step gradient descent.
 
-# Print out the loss after 1-step gradient descent.
-pred = linear(x)
-loss = criterion(pred, y)
-print('loss after 1 step optimization: ', loss.item())
+    print('loss after ' + str(i + 1) + ' step optimization: ', loss.item())
 # ================================================================== #
 #                     3. Loading data from numpy                     #
 # ================================================================== #
@@ -85,7 +89,7 @@ z = y.numpy()
 # Download and construct CIFAR-10 dataset.
 # type =  <class 'torchvision.datasets.cifar.CIFAR10'>
 train_dataset = torchvision.datasets.CIFAR10(
-    root='./data/',
+    root='../data/',
     train=True,
     # 把一个取值范围是[0,255]的PIL.Image或者shape为(H,W,C)的numpy.ndarray，转换成形状为[C,H,W]的torch.Tensor
     transform=transforms.ToTensor(),
