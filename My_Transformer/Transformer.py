@@ -433,7 +433,7 @@ class LabelSmoothing(nn.Module):
 def data_gen(V, batch, nbatches):
     "Generate random data for a src-tgt copy task."
     for i in range(nbatches):
-        data = torch.from_numpy(np.random.randint(1, V, size=(batch, 10)))
+        data = torch.from_numpy(np.random.randint(1, V, size=(batch, 300)))
         data[:, 0] = 1
         src = Variable(data, requires_grad=False)
         tgt = Variable(data, requires_grad=False)
@@ -572,7 +572,7 @@ if __name__ == '__main__':
     for epoch in range(5):
         print('new epoch start')
         model.train()
-        tmp = data_gen(V, 30, 20)
+        tmp = data_gen(V, 64, 200)
         run_epoch(tmp, model,
                   SimpleLossCompute(model.generator, criterion, model_opt))
         model.eval()
@@ -582,4 +582,4 @@ if __name__ == '__main__':
                 SimpleLossCompute(model.generator, criterion, None)))
     endTime = time.time()
     # normal  1.04
-    print('cost:', (endTime - startTime) / 60)
+    print('time cost:', (endTime - startTime) / 60)

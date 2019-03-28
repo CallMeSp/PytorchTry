@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData">
+  <component name="PublishConfigData" autoUpload="Always" serverName="iip@114.212.85.191:22">
     <serverData>
+      <paths name="iip@114.212.85.191:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/media/iip/019e1605-d3ef-4333-a149-737a00c9110f/SpWannaSing/PytorchTry" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="iip@114.212.85.80:22">
         <serverdata>
           <mappings>
@@ -9,6 +16,14 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="iip@114.212.86.148:22">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>
