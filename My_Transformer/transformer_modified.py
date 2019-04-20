@@ -179,6 +179,7 @@ def subsequent_mask(size):
 # Attention(Q,K,V)=softmax(QK^T/sqrt(d_k)) * V
 def attention(query, key, value, mask=None, dropout=None):
     # Compute 'Scaled Dot Product Attention'
+    # 'attention:q,k,v   shape:[64, 8, 299, 64]
     d_k = query.size(-1)
     scores = torch.matmul(query, key.transpose(-2, -1)) / math.sqrt(d_k)
     if mask is not None:
@@ -206,6 +207,8 @@ class MultiHeadedAttention(nn.Module):
         self.dropout = dropout
         assert d_model % h == 0
         self.d_k = d_model // h
+        self.d_mini = self.d_k // 4
+        # 前三个作为WQ、WK、WV的投影矩阵，最后一个作为全连接层的weight
         self.linears = clones(nn.Linear(d_model, d_model), 4)
         self.attn = None
 
@@ -214,10 +217,23 @@ class MultiHeadedAttention(nn.Module):
             mask = mask.unsqueeze(1)
         nbatches = query.size(0)
         # 1) Do all the linear projections in batch from d_model => h x d_k
-        query, key, value = [
-            l(x).view(nbatches, -1, self.h, self.d_k).transpose(1, 2)
-            for l, x in zip(self.linears, (query, key, value))
-        ]
+        # print('in multiHeadedAttention befor:', query.shape,
+        #       self.linears[0].weight[:, :self.h * self.d_mini].shape)
+        # query, key, value = [
+        #     l(x).view(nbatches, -1, self.h, self.d_k).transpose(1, 2)
+        #     for l, x in zip(self.linears, (query, key, value))
+        # ]
+        query = (torch.matmul(
+            query, self.linears[0].weight[:, :self.h * self.d_mini]) +
+                 self.linears[0].bias[:self.h * self.d_mini]).view(
+                     nbatches, -1, self.h, self.d_mini).transpose(1, 2)
+        key = (
+            torch.matmul(key, self.linears[1].weight[:, :self.h * self.d_mini])
+            + self.linears[1].bias[:self.h * self.d_mini]).view(
+                nbatches, -1, self.h, self.d_mini).transpose(1, 2)
+        value = self.linears[2](value).view(nbatches, -1, self.h,
+                                            self.d_k).transpose(1, 2)
+        # print('in multiHeadedAttention after:', query.shape)
         # 2) Apply attention on all the projected vectors in batch.
         x, self.attn = attention(
             query, key, value, mask=mask, dropout=self.dropout)
@@ -373,9 +389,9 @@ class NoamOpt:
     def rate(self, step=None):
         if step is None:
             step = self._step
-        return self.factor * (self.model_size **
-                              (-0.5) * min(step **
-                                           (-0.5), step * self.warmup ** (-1.5)))
+        return self.factor * (self.model_size**
+                              (-0.5) * min(step**
+                                           (-0.5), step * self.warmup**(-1.5)))
 
 
 class LabelSmoothing(nn.Module):
@@ -544,5 +560,6 @@ if __name__ == '__main__':
                 data_gen(V, 30, 5), model,
                 SimpleLossCompute(model.generator, criterion, None)))
     endTime = time.time()
-    # normal  3.9171374003092447
+    # normal  3.935265775521596
+    # modify  3.6016740798950195
     print('time cost:', (endTime - startTime) / 60)

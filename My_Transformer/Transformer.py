@@ -253,7 +253,9 @@ class Embeddings(nn.Module):
 
     def forward(self, x):
         newx = x.long()
-        return self.lut(newx) * math.sqrt(self.d_model)
+        embeddingMat = self.lut(newx) * math.sqrt(self.d_model)
+        # print('x_embedding:', x.shape, embeddingMat.shape)
+        return embeddingMat
 
 
 class PositionalEncoding(nn.Module):
@@ -274,7 +276,7 @@ class PositionalEncoding(nn.Module):
         self.register_buffer('pe', pe)
 
     def forward(self, x):
-        x = x + Variable(self.pe[:, :x.size(1)], requires_grad=False)
+        x = x + Variable(self.pe[:, :x.size(-2)], requires_grad=False)
         return self.dropout(x)
 
 
@@ -304,29 +306,6 @@ def make_model(src_vocab,
     return model
 
 
-class Batch:
-    """
-    object for holding a batch of data with mask during training
-    """
-
-    def __init__(self, src, trg=None, pad=0):
-        self.src = src
-        self.src_mask = (src != pad).unsqueeze(-2)
-        if trg is not None:
-            self.trg = trg[:, :-1]
-            self.trg_y = trg[:, 1:]
-            self.trg_mask = self.make_stf_mask(self.trg, pad)
-            self.ntokens = (self.trg_y != pad).data.sum()
-
-    @staticmethod
-    def make_stf_mask(tgt, pad):
-        # create a mask to hide padding and future words.
-        tgt_mask = (tgt != pad).unsqueeze(-2)
-        tgt_mask = tgt_mask & Variable(
-            subsequent_mask(tgt.size(-1)).type_as(tgt_mask.data))
-        return tgt_mask
-
-
 def run_epoch(data_iter, model, loss_compute):
     "Standard Training and Logging Function"
     start = time.time()
@@ -334,6 +313,7 @@ def run_epoch(data_iter, model, loss_compute):
     total_loss = 0
     tokens = 0
     for i, batch in enumerate(data_iter):
+        # batch.src.shape:
         out = model.forward(batch.src, batch.trg, batch.src_mask,
                             batch.trg_mask)
         loss = loss_compute(out, batch.trg_y, batch.ntokens)
@@ -431,8 +411,32 @@ class LabelSmoothing(nn.Module):
         return self.criterion(x, Variable(true_dist, requires_grad=False))
 
 
+class Batch:
+    """
+    object for holding a batch of data with mask during training
+    """
+
+    def __init__(self, src, trg=None, pad=0):
+        self.src = src
+        self.src_mask = (src != pad).unsqueeze(-2)
+        if trg is not None:
+            self.trg = trg[:, :-1]
+            self.trg_y = trg[:, 1:]
+            self.trg_mask = self.make_stf_mask(self.trg, pad)
+            self.ntokens = (self.trg_y != pad).data.sum()
+
+    @staticmethod
+    def make_stf_mask(tgt, pad):
+        # create a mask to hide padding and future words.
+        tgt_mask = (tgt != pad).unsqueeze(-2)
+        tgt_mask = tgt_mask & Variable(
+            subsequent_mask(tgt.size(-1)).type_as(tgt_mask.data))
+        return tgt_mask
+
+
 def data_gen(V, batch, nbatches):
     "Generate random data for a src-tgt copy task."
+    maxlength = 10
     for i in range(nbatches):
         data = torch.from_numpy(np.random.randint(1, V, size=(batch, 300)))
         data[:, 0] = 1
@@ -458,48 +462,6 @@ class SimpleLossCompute:
             self.opt.step()
             self.opt.optimizer.zero_grad()
         return loss * norm
-
-
-def greedy_decode(model, src, src_mask, max_len, start_symbol):
-    memory = model.encode(src, src_mask)
-    ys = torch.ones(1, 1).fill_(start_symbol).type_as(src.data)
-    for i in range(max_len - 1):
-        out = model.decode(
-            memory, src_mask, Variable(ys),
-            Variable(subsequent_mask(ys.size(1)).type_as(src.data)))
-        prob = model.generator(out[:, -1])
-        _, next_word = torch.max(prob, dim=1)
-        next_word = next_word.data[0]
-        ys = torch.cat(
-            [ys, torch.ones(1, 1).type_as(src.data).fill_(next_word)], dim=1)
-    return ys
-
-
-class MyIterator(data.Iterator):
-    def create_batches(self):
-        if self.train:
-
-            def pool(d, random_shuffler):
-                for p in data.batch(d, self.batch_size * 100):
-                    p_batch = data.batch(
-                        sorted(p, key=self.sort_key), self.batch_size,
-                        self.batch_size_fn)
-                    for b in random_shuffler(list(p_batch)):
-                        yield b
-
-            self.batches = pool(self.data(), self.random_shuffler)
-
-        else:
-            self.batches = []
-            for b in data.batch(self.data(), self.batch_size,
-                                self.batch_size_fn):
-                self.batches.append(sorted(b, key=self.sort_key))
-
-
-def rebatch(pad_idx, batch):
-    "Fix order in torchtext to match ours"
-    src, trg = batch.src.transpose(0, 1), batch.trg.transpose(0, 1)
-    return Batch(src, trg, pad_idx)
 
 
 class MultiGPULossCompute:
@@ -582,6 +544,5 @@ if __name__ == '__main__':
                 data_gen(V, 30, 5), model,
                 SimpleLossCompute(model.generator, criterion, None)))
     endTime = time.time()
-    # normal  1：3.9171374003092447
-    #         2：3.92539781332016
+    # normal  3.9171374003092447
     print('time cost:', (endTime - startTime) / 60)

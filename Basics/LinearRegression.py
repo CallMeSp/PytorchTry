@@ -2,11 +2,12 @@ import torch
 import torch.nn as nn
 import numpy as np
 import matplotlib.pyplot as plt
+from torch.autograd import Variable
 
 # Hyper-parameters
 input_size = 1
 output_size = 1
-num_epochs = 60
+num_epochs = 100
 learning_rate = 0.001
 
 # Toy dataset
@@ -21,21 +22,26 @@ y_train = np.array(
     dtype=np.float32)
 
 # Linear regression model
-model = nn.Linear(input_size, output_size)
+model = nn.Linear(input_size, output_size + 1)
 
+ProjMat = Variable(torch.randn(input_size, output_size), requires_grad=True)
+ProjBais = Variable(torch.rand(1), requires_grad=True)
+print('rawMt:', ProjMat)
 # Loss and optimizer
 criterion = nn.MSELoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
 # Train the model
 for epoch in range(num_epochs):
-    
+
     # Convert numpy arrays to torch tensors
     inputs = torch.from_numpy(x_train)
     targets = torch.from_numpy(y_train)
 
     # Forward pass
-    outputs = model(inputs)
+    # outputs = model(inputs)
+    outputs = torch.matmul(inputs, model.weight[:output_size, :]) + model.bias[0]
+
     loss = criterion(outputs, targets)
 
     # Backward and optimize
@@ -45,13 +51,15 @@ for epoch in range(num_epochs):
     loss.backward()
     # 这是大多数optimizer所支持的简化版本。一旦梯度被如backward()之类的函数计算好后，我们就可以调用这个函数。
     optimizer.step()
-
+    # print('grad:', ProjMat.grad, ProjBais.grad)
     if (epoch + 1) % 5 == 0:
         print('Epoch [{}/{}], Loss: {:.4f}'.format(epoch + 1, num_epochs,
                                                    loss.item()))
+        print(model.weight[:output_size, :], model.bias[0])
 # model = torch.load('model.ckpt')
 # Plot the graph
-predicted = model(torch.from_numpy(x_train)).detach().numpy()
+predicted = (torch.matmul(inputs, model.weight[:output_size, :]) +
+             model.bias[0]).detach().numpy()
 plt.plot(x_train, y_train, 'ro', label='Original data')
 plt.plot(x_train, predicted, label='Fitted line')
 plt.legend()
