@@ -8,6 +8,7 @@ __pycache__/
 *.npy
 *.ckpt
 Basics/data/
+someTest/data/
 data/
 # Distribution / packaging
 .Python

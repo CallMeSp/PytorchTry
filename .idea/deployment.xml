@@ -5,7 +5,7 @@
       <paths name="iip@114.212.85.191:22">
         <serverdata>
           <mappings>
-            <mapping deploy="/media/iip/019e1605-d3ef-4333-a149-737a00c9110f/SpWannaSing/PytorchTry" local="$PROJECT_DIR$" />
+            <mapping deploy="/PytorchTry" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
