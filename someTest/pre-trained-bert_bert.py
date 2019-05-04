@@ -1,9 +1,16 @@
 import torch
 from pytorch_pretrained_bert import BertTokenizer, BertModel, BertForMaskedLM
-
+import argparse
 # OPTIONAL: if you want to have more information on what's happening, activate the logger as follows
 import logging
 logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
+parser = argparse.ArgumentParser(description='transformer Test')
+
+parser.add_argument('--useGPU', action='store_true')
+
+args = parser.parse_args()
+
 
 # Load pre-trained model tokenizer (vocabulary)
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -32,10 +39,12 @@ print(tokens_tensor)
 model = BertModel.from_pretrained('bert-base-uncased')
 model.eval()
 
+print(args.useGPU)
 # If you have a GPU, put everything on cuda
-tokens_tensor = tokens_tensor.to('cuda')
-segments_tensors = segments_tensors.to('cuda')
-model.to('cuda')
+if torch.cuda.is_available() and args.useGPU:
+    tokens_tensor = tokens_tensor.to('cuda')
+    segments_tensors = segments_tensors.to('cuda')
+    model.to('cuda')
 
 # Predict hidden states features for each layer
 with torch.no_grad():
